@@ -1,27 +1,30 @@
+"""
+A command line clipboard manager
+"""
 from pyperclip import copy, paste
 import cPickle as pickle
 import argparse, sys
 
 try:
-    memos = pickle.load(open('dump.p', 'rb'))   #Load saved memos
+    MEMOS = pickle.load(open('dump.p', 'rb'))   #Load saved MEMOS
 except IOError:
     #If dump doesn't exist create new
-    memos = []
+    MEMOS = []
 
 class ClipboardMemo(object):
-    
+
     def __init__(self):
 
         parser = argparse.ArgumentParser(
-            description='Save clipboard data as memos',
-            usage = '''clipboard_memo <command> [<args>]
+            description='Save clipboard data as MEMOS',
+            usage='''clipboard_memo <command> [<args>]
 Available commands are:
     save     Save the contents of clipboard
     delete   Delete a memo
-    retrive  Display all saved memos
+    retrive  Display all saved MEMOS
     yank     Copy a memo to clipboard
 ''')
-        parser.add_argument('command', help = 'Subcommand to run')
+        parser.add_argument('command', help='Subcommand to run')
         args = parser.parse_args(sys.argv[1:2]) #Parse only the first argument
 
         if not hasattr(self, args.command):
@@ -32,60 +35,54 @@ Available commands are:
         #Execute the given command
         getattr(self, args.command)()
 
-    def commit(self):
-        """Save the current memos to memory"""
-        pickle.dump(memos, open('dump.p', 'wb'))
+    @staticmethod
+    def commit():
+        """Save the current MEMOS to memory."""
+        pickle.dump(MEMOS, open('dump.p', 'wb'))
 
     def save(self):
-        """Save a new memo"""
-
-        parser = argparse.ArgumentParser(
-            description = 'Save new memo from clipboard')
-
+        """Save a new memo to the MEMOS list."""
         text = str(paste()) #Data from clipboard
         if not bool(text):
             exit()  #Nothing to save
 
         text = text.encode('utf-8') #Clean string
         text = text.strip() #Get rid of whitespaces
-        memos.append(text)    
+        MEMOS.append(text)
         self.commit()
 
     def delete(self):
-        """Deletes the memos of the given index number"""
-
+        """Deletes the MEMOS of the given index number."""
         parser = argparse.ArgumentParser(
-            description = 'Delete memo of the given index number from clipboard')       
-        parser.add_argument('index', type = int)
+            description='Delete memo of the given index number from clipboard')
+        parser.add_argument('index', type=int)
         args = parser.parse_args(sys.argv[2:])
-        
+
         try:
-            del memos[args.index - 1]   #Since we enumerate from 1 instead of 0
+            del MEMOS[args.index - 1]   #Since we enumerate from 1 instead of 0
         except TypeError:
             print 'Integer required'
         self.commit()
 
-    def retrive(self):
-        """Retrivs all saved memos"""
-        parser = argparse.ArgumentParser(
-            description = 'Retrive all saved memos')
-        
-        print '\n'.join(str(i) for i in enumerate(memos, start = 1))
+    @staticmethod
+    def retrive():
+        """Retrivs all saved MEMOS."""
+        print '\n'.join(str(i) for i in enumerate(MEMOS, start=1))
 
-    def yank(self):
-        """Copy the memo corresponding to the given index number
-        to clipboard
-        """
+    @staticmethod
+    def yank():
+        """Copy the memo corresponding to the given index number to clipboard."""
         parser = argparse.ArgumentParser(
-            description = '''Copy the memo corresponding to the given index number
+            description='''Copy the memo corresponding to the given index number
                 to clipboard''')
-        parser.add_argument('index', type = int)
+        parser.add_argument('index', type=int)
         args = parser.parse_args(sys.argv[2:])
-        
+
         try:
-            copy(str(memos[args.index - 1]))    #Since we enumerate from 1 instead of 0
+            copy(str(MEMOS[args.index - 1]))    #Since we enumerate from 1 instead of 0
         except TypeError:
             pass    #Oops
 
 if __name__ == '__main__':
     ClipboardMemo()
+    
