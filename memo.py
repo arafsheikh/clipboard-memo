@@ -83,6 +83,9 @@ Available commands are:
         except TypeError:
             pass    #Oops
 
-if __name__ == '__main__':
+def main():
     ClipboardMemo()
+
+if __name__ == '__main__':
+    main()
     
