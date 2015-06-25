@@ -8,8 +8,8 @@ clipboard for later use.
 #Dependencies
 `pyperclip` python package is required.
 
-Install it with:
-`pip install pyperclip`
+To install dependencies run:
+`pip install -r requirements.txt`
 
 #Installation
 1. First clone this repo with:
