@@ -10,7 +10,7 @@ Once setup the only required step is to hit a key combination to save the curren
 *On some Linux distros `xclip` package may be required.* Install it with `sudo apt-get install xclip` on Ubuntu if you cannot save memos.
 
 ## Installation
-* Git clone this repo and run the `setup.py`.
+* Using Pypi, `pip install clipboard_memo`
 
 * Now bind a key-combination to the `cmemo_direct` command to save memos directly with a single keystroke.
 
