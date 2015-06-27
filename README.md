@@ -40,6 +40,8 @@ optional arguments:
 
 ## Todo
 * Move from `pickle` to `sqlite3`
+* Add colors
+* Shrink multi-line memmos
 
 ## License
 MIT
