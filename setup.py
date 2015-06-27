@@ -9,7 +9,7 @@ setup(
     name='clipboard_memo',
     version='0.1',
     description='A command-line clipboard manager',
-    long_description=read('README.md'),
+    long_description=read('README.rst'),
     url='http://github.com/arafsheikh/clipboard-memo',
     author='Sheikh Araf',
     author_email='arafsheikh@rocketmail.com',
