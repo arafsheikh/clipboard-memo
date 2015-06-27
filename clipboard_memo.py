@@ -3,25 +3,34 @@ A command line clipboard manager
 """
 from pyperclip import copy, paste
 import cPickle as pickle
-import argparse, sys
-
-try:
-    MEMOS = pickle.load(open('dump.p', 'rb'))   #Load saved MEMOS
-except IOError:
-    #If dump doesn't exist create new
-    MEMOS = []
+import argparse, sys, os
 
 class ClipboardMemo(object):
 
     def __init__(self):
 
+        #Create directory to save dump file
+        if not os.path.exists(os.path.expanduser('~/.clipboard_memo/')):
+            os.makedirs(os.path.expanduser('~/.clipboard_memo/'))
+
+        self.dbpath = os.path.expanduser('~/.clipboard_memo/dump.p')
+
+        try:
+            self.memos = pickle.load(open(self.dbpath, 'rb'))   #Load saved memos
+        except IOError:
+            #If dump doesn't exist create new
+            self.memos = []
+
+    def run(self):
+        """Parse and run"""
+
         parser = argparse.ArgumentParser(
-            description='Save clipboard data as MEMOS',
+            description='Save clipboard data as memos',
             usage='''clipboard_memo <command> [<args>]
 Available commands are:
     save     Save the contents of clipboard
     delete   Delete a memo
-    retrive  Display all saved MEMOS
+    ls       List all saved memos
     yank     Copy a memo to clipboard
 ''')
         parser.add_argument('command', help='Subcommand to run')
@@ -35,42 +44,40 @@ Available commands are:
         #Execute the given command
         getattr(self, args.command)()
 
-    @staticmethod
-    def commit():
-        """Save the current MEMOS to memory."""
-        pickle.dump(MEMOS, open('dump.p', 'wb'))
+
+    def commit(self):
+        """Save the current memos to memory."""
+        pickle.dump(self.memos, open(self.dbpath, 'wb'))
 
     def save(self):
-        """Save a new memo to the MEMOS list."""
+        """Save a new memo to the memos list."""
         text = str(paste()) #Data from clipboard
         if not bool(text):
             exit()  #Nothing to save
 
         text = text.encode('utf-8') #Clean string
         text = text.strip() #Get rid of whitespaces
-        MEMOS.append(text)
+        self.memos.append(text)
         self.commit()
 
     def delete(self):
-        """Deletes the MEMOS of the given index number."""
+        """Deletes the memos of the given index number."""
         parser = argparse.ArgumentParser(
             description='Delete memo of the given index number from clipboard')
         parser.add_argument('index', type=int)
         args = parser.parse_args(sys.argv[2:])
 
         try:
-            del MEMOS[args.index - 1]   #Since we enumerate from 1 instead of 0
+            del self.memos[args.index - 1]   #Since we enumerate from 1 instead of 0
         except TypeError:
             print 'Integer required'
         self.commit()
 
-    @staticmethod
-    def retrive():
-        """Retrivs all saved MEMOS."""
-        print '\n'.join(str(i) for i in enumerate(MEMOS, start=1))
+    def ls(self):
+        """Lists all saved memos."""
+        print '\n'.join(str(i) for i in enumerate(self.memos, start=1))
 
-    @staticmethod
-    def yank():
+    def yank(self):
         """Copy the memo corresponding to the given index number to clipboard."""
         parser = argparse.ArgumentParser(
             description='''Copy the memo corresponding to the given index number
@@ -79,13 +86,18 @@ Available commands are:
         args = parser.parse_args(sys.argv[2:])
 
         try:
-            copy(str(MEMOS[args.index - 1]))    #Since we enumerate from 1 instead of 0
+            copy(str(self.memos[args.index - 1]))    #Since we enumerate from 1 instead of 0
         except TypeError:
             pass    #Oops
 
 def main():
-    ClipboardMemo()
+    c = ClipboardMemo()
+    c.run()
+
+def direct_save():
+    """Directly save memo when the keyboard shortcut is pressed"""
+    c = ClipboardMemo()
+    c.save()
 
 if __name__ == '__main__':
     main()
-    
