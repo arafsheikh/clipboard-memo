@@ -18,10 +18,10 @@ setup(
     include_package_data=True,
     entry_points='''
         [console_scripts]
-        cmemo=clipboard_memo:main
-        cmemo_direct=clipboard_memo:direct_save
+        cmemo=clipboard_memo.main:main
+        cmemo_direct=clipboard_memo.direct:direct_save
     ''',
-    py_modules=['clipboard_memo'],
+    packages=['clipboard_memo'],
     install_requires=[
         'pyperclip',
     ],

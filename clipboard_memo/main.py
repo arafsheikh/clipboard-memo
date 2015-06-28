@@ -94,10 +94,5 @@ def main():
     c = ClipboardMemo()
     c.run()
 
-def direct_save():
-    """Directly save memo when the keyboard shortcut is pressed"""
-    c = ClipboardMemo()
-    c.save()
-
 if __name__ == '__main__':
     main()
