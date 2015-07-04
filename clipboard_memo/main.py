@@ -64,14 +64,28 @@ Available commands are:
         """Deletes the memos of the given index number."""
         parser = argparse.ArgumentParser(
             description='Delete memo of the given index number from clipboard')
-        parser.add_argument('index', type=int)
+        parser.add_argument('-i', '--index', type=int, help='Index of the memo to delete')
+        parser.add_argument('-a', '--all', help='Delete all memos', action='store_true')
         args = parser.parse_args(sys.argv[2:])
 
-        try:
-            del self.memos[args.index - 1]   #Since we enumerate from 1 instead of 0
-        except TypeError:
-            print 'Integer required'
-        self.commit()
+        #Delete all memos
+        if args.all:
+            self.memos = []    #Delete all memos
+            self.commit()
+            exit(0)
+
+        #If index number is provided then delete the particular memo
+        if args.index:
+            try:
+                del self.memos[args.index - 1]   #Since we enumerate from 1 instead of 0
+            except TypeError:
+                print 'Integer required'
+                self.commit()
+        
+        else:
+            print 'Too few arguments. Provide the index number of memo to delete'
+
+        
 
     def ls(self):
         """Lists all saved memos."""
