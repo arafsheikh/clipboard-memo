@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name='clipboard_memo',
-    version='0.1',
+    version='0.2',
     description='A command-line clipboard manager',
     long_description=read('README.rst'),
     url='http://github.com/arafsheikh/clipboard-memo',
