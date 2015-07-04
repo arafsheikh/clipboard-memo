@@ -28,10 +28,11 @@ class ClipboardMemo(object):
             description='Save clipboard data as memos',
             usage='''clipboard_memo <command> [<args>]
 Available commands are:
-    save     Save the contents of clipboard
-    delete   Delete a memo
-    ls       List all saved memos
-    yank     Copy a memo to clipboard
+    save                Save the contents of clipboard
+    delete INDEX        Delete a memo of given index number
+    delete -a | --all   Delete all saved memos
+    ls                  List all saved memos
+    yank INDEX          Copy a memo to clipboard
 ''')
         parser.add_argument('command', help='Subcommand to run')
         args = parser.parse_args(sys.argv[1:2]) #Parse only the first argument
