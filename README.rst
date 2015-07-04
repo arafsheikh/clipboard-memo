@@ -7,12 +7,14 @@ This clipboard manager is intended to be used without opening any
 additional screen. Once setup the only required step is to hit a key
 combination to save the current contents of the clipboard for later use.
 
+.. image:: https://landscape.io/github/arafsheikh/clipboard-memo/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/arafsheikh/clipboard-memo/master
+   :alt: Code Health
+
 Dependencies
 ------------
 
-``pyperclip`` python package is required. This package will be installed
-on running ``setup.py``. If you experience trouble then use the
-``requirements.txt`` file instead to manually install the dependencies.
+``pyperclip`` python package is required. This package will be automatically installed.
 
 *On some Linux distros ``xclip`` package may be required.* Install it
 with ``sudo apt-get install xclip`` on Ubuntu if you cannot save memos.
